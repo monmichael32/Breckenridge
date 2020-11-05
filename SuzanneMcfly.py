@@ -19,8 +19,8 @@ driver = webdriver.Chrome(options=options)
 
 #Signing into the account, and going to the needed URL
 driver.get("https://www.bgvgrandcentral.com/")
-username = driver.find_element_by_name("loginModel.Username").send_keys("")
-Password = driver.find_element_by_name("loginModel.Password").send_keys("")
+username = driver.find_element_by_name("loginModel.Username").send_keys("johnnyhughes")
+Password = driver.find_element_by_name("loginModel.Password").send_keys("$#REFDVC43refdvc")
 form = driver.find_element_by_tag_name("form")
 form.submit()
 driver.get("https://www.bgvgrandcentral.com/reservations/bonus-time")
