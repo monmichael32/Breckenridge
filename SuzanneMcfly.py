@@ -8,6 +8,7 @@ import json
 import requests
 from bs4 import BeautifulSoup
 import sys, os, base64, datetime, hashlib, hmac 
+import boto3
 
 #Setting up the webdriver
 options = webdriver.ChromeOptions()
@@ -18,9 +19,12 @@ global driver
 driver = webdriver.Chrome(options=options)
 
 #Signing into the account, and going to the needed URL
+ssm = boto3.client('ssm')
+parameter = ssm.get_parameter(Name='Breckpass', WithDecryption=True)
+print("Parameter:",(parameter['Parameter']['Value']))
 driver.get("https://www.bgvgrandcentral.com/")
 username = driver.find_element_by_name("loginModel.Username").send_keys("johnnyhughes")
-Password = driver.find_element_by_name("loginModel.Password").send_keys("$#REFDVC43refdvc")
+Password = driver.find_element_by_name("loginModel.Password").send_keys((parameter['Parameter']['Value']))
 form = driver.find_element_by_tag_name("form")
 form.submit()
 driver.get("https://www.bgvgrandcentral.com/reservations/bonus-time")
@@ -107,6 +111,39 @@ def is_last_day(Date,month):
     if month == 10 and Date == 30:
         return True
         print ("Last day of the month")
+    elif month == 11 and Date == 31:
+        return True
+        print ("Last day of the month")
+    elif month == 0 and Date == 31:
+        return True
+        print ("Last day of the month")
+    elif month == 1 and Date == 28:
+        return True
+        print ("Last day of the month")
+    elif month == 2 and Date == 31:
+       return True
+       print ("Last day of the month")
+    elif month == 3 and Date == 31:
+       return True
+       print ("Last day of the month")
+    elif month == 4 and Date == 31:
+       return True
+       print ("Last day of the month")
+    elif month == 5 and Date == 30:
+       return True
+       print ("Last day of the month")
+    elif month == 6 and Date == 31:
+       return True
+       print ("Last day of the month")
+    elif month == 7 and Date == 31:
+       return True
+       print ("Last day of the month")
+    elif month == 8 and Date == 30:
+       return True
+       print ("Last day of the month")
+    elif month == 9 and Date == 31:
+       return True
+       print ("Last day of the month")
     else:
         return False
    #find attribute data month based on what is currently selected 
@@ -148,20 +185,26 @@ def Procedure (green_days,lodge,lodgename):
     checkout = Date + 1
     #print("  CheckinDate:",Date,"Checkout Date:",checkout)
     checkin = str(Date)
-    dictKey = (lodgename+"_"+checkin)
+    #dictKey = (lodgename+"_"+month+"_"+checkin)
     month = get_month(Date)
+    dictKey = (lodgename+"_"+str(month)+"_"+checkin)
     if (is_last_day(Date,month)):
       #print("   Month:",month)
+      month = ((month+1)%12)
+      dictKey = (lodgename+"_"+str(month)+"_"+checkin)
       last_day_select(indexnumber,Date,dictKey,lodge)
       #print("   Last day of the month")
     elif checkout in green_days and indexnumber == 0:
+      dictKey = (lodgename+"_"+str(month)+"_"+checkin)
       checkinout(indexnumber,Date,dictKey,lodge)
       #print("   Ran first elif")
     elif checkout in green_days:
+      dictKey = (lodgename+"_"+str(month)+"_"+checkin)
       deselect_checkout(indexnumber,Date,lodge,dictKey)
       #print("   Ran second elif")
     elif checkout not in green_days:
       #print("   Running checkin_fill")
+      dictKey = (lodgename+"_"+str(month)+"_"+checkin)
       checkin_fill(indexnumber,Date,lodge,dictKey)
       
 #Selects intial checkin/out dates
