@@ -69,7 +69,8 @@ def structuring_based_on_date(lodges):
                   Dates[Room].update(lodgeDateDict[lodgeDate])
                elif date not in Dates:
                   print("   Not in List")
-                  Dates.append( date = ({"date":date,"Room":lodgeDateDict[lodgeDate]}) )
+                  Dates.append(({"date":date,"Room":lodgeDateDict[lodgeDate]}) )
+                  #Dates.append( date = ({"date":date,"Room":lodgeDateDict[lodgeDate]}) )
                #f = itemgetter(date)
                #Dates.sort(key=f)
         print("---")
